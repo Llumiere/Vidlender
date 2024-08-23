@@ -1,26 +1,28 @@
 const mongoose = require('mongoose');
 const {genreShema} =require('./genre');
-const { required } = require('joi');
 const Joi = require('joi');
 
+const customerSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 25,
+    },
+    isGold:{
+        type: Boolean,
+        default: false,
+    }, 
+    phone: {
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 25,
+    }
+})
+
 const Rental = mongoose.model('Rental', new mongoose.Schema({
-    customer: new mongoose.Schema({
-        name: {
-            type: String,
-            required: true,
-            minlength: 3,
-            maxlength: 25,
-        },
-        isGold:{
-            type: Boolean,
-            default: false,
-        }, 
-        phone: {
-            type: String,
-            required: true,
-            minlength: 3,
-            maxlength: 25,
-        },
+    customer: customerSchema,
     movie: new mongoose.Schema({
         title: {
             type:String,
@@ -36,7 +38,8 @@ const Rental = mongoose.model('Rental', new mongoose.Schema({
             max: 255
         }
     }),
-    required:true,
+
+    // required:true,
     dateOut: {
         type: Date,
     },
@@ -45,7 +48,7 @@ const Rental = mongoose.model('Rental', new mongoose.Schema({
         min:0
     },
     
-})}));
+}));
 
 function validateRental(rental){
     // npm i joi-objectId
@@ -58,4 +61,4 @@ function validateRental(rental){
 }
 
 exports.validate = validateRental;
-exports.Movie = Movie;
+exports.Rental = Rental;

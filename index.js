@@ -17,7 +17,7 @@ app.use(express.json())
 app.use('/api/genres', genres);
 app.use('/api/customers', customers);
 app.use('/api/movies', movies)
-app.use('api/rental', rental)
+app.use('/api/rentals', rental)
 app.use('/', home);
 
 const PORT = process.env.PORT || 8080;
