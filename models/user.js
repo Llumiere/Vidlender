@@ -7,7 +7,7 @@ const regSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 25,
+        maxlength: 50,
     },
     email:{
         type: String,
@@ -20,22 +20,21 @@ const regSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true,
-        match: /[A-Za-z]*/,
         minlength: 3,
         maxlength: 50,
 
     }
 })
 
-const Users = mongoose.model('users',regSchema);
+const User = mongoose.model('User',regSchema);
 
 function validateRegistration(reg){
     const schema = Joi.object({
-        name: Joi.string().required().min().max(),
-        email: Joi.string().required().min().max(),
-        password: Joi.string().required().min().max(),
+        name: Joi.string().required().min(3).max(255),
+        email: Joi.string().required().min(5).max(255),
+        password: Joi.string().required().min(5).max(255),
     })
 };
 
 exports.validate = validateRegistration;
-exports.Users = Users;
+exports.User = User;

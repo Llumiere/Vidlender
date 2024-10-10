@@ -5,6 +5,7 @@ const { Transaction } = require('transactions-mongoose')
 const transaction = new Transaction().setSendbox(true);
 const { Customer } = require('../models/customer')
 const { Movie } = require('../models/movie');
+const {Genre} = require('../models/genre')
 const mongoose = require('mongoose');
 const {validate, Rental} = require('../models/rental')
 
@@ -15,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const rentals = await Genre.findById(req.params.id);
+    const rentals = await Rental.findById(req.params.id);
 
     if (!rentals) return res.status(404).send("Given ID Not Found")
 
@@ -50,32 +51,36 @@ router.post('/', async (req, res) => {
             dailyRentalRate: movie.dailyRentalRate,
         },
     });
-    try {
+    // try {
         // new Fawn.Task()
         // .save('rentals', rental)
         // .update('movies', {_id: movie._id},{
         //     $inc: {numberInstock: -1}
-        const session = mongoose.startSession();
-        await session.withTransaction(async function saveAndUpdate() {
-            await rental.save(rental);
-            await movie.update({ _id: movie._id }, { $inc: { numberInstock: -1 } })
-        }); 
-        (await session).commitTransaction()
         // })
-        // .run()
-    }
-    catch (ex) {
-        res.status(500).send('Something Failed...')
-    }
+        // .run();
+        
+        // res.send(rental)
+        // const session = mongoose.startSession();
+        // await session.withTransaction(async function saveAndUpdate() {
+        //     await rental.save(rental);
+        //     await movie.update({ _id: movie._id }, { $inc: { numberInstock: -1 } })
+        // }); 
+        // (await session).commitTransaction()
+
+        
+        rental = await rental.save();
+
+        movie.numberInstock--;
+        movie.save();
+
+        res.send(rental)
+    // }
+    // catch (ex) {
+    //     res.status(500).send('Something Failed...', ex)
+    // }
 
 
 
-    // rental = await rental.save();
-
-    // movie.numberInstock--;
-    // movie.save();
-
-    res.send(rental)
 });
 
 module.exports = router;
