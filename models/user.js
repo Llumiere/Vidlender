@@ -2,10 +2,10 @@ const Joi = require('joi');
 const { required } = require('joi');
 const mongoose = require('mongoose');
 
-const regSchema = new mongoose.Schema({
+const User = mongoose.model('User', new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        // required: true,
         minlength: 3,
         maxlength: 50,
     },
@@ -14,27 +14,26 @@ const regSchema = new mongoose.Schema({
         unique: true,
         required: true,
         minlength: 3,
-        maxlength: 50,
+        maxlength: 255,
 
     },
     password:{
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 50,
+        maxlength: 1024,
 
     }
-})
+}))
 
-const User = mongoose.model('User',regSchema);
-
-function validateRegistration(reg){
+function validateUser(user){
     const schema = Joi.object({
-        name: Joi.string().required().min(3).max(255),
+        name: Joi.string().required().min(3).max(50),
         email: Joi.string().required().min(5).max(255),
-        password: Joi.string().required().min(5).max(255),
+        password: Joi.string().required().min(5).max(1024),
     })
+    return schema.validate(user);
 };
 
-exports.validate = validateRegistration;
+exports.validate = validateUser;
 exports.User = User;

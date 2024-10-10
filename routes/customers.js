@@ -8,6 +8,7 @@ router.get('/api/genre', async (req, res) => {
     const genre = await Customer.find().sort('name');
     res.send(genre);
 });
+
 router.get('/:id', async (req, res) => {
     const genre = await Customer.findById(req.params.id);
     
