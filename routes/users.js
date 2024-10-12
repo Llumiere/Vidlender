@@ -23,9 +23,10 @@ router.post('/', async (req, res)=>{
 
     await user.save();
 
-    const token = jwt.sign({_id:user._id}, config.get('jwtPrivateKey'), {expiresIn:'1h'})
-    res.header('x-auth-toke', token).send(_.pick(user,["_id","name","email"])
-    );
+
+
+    const token = user.generateAuthToken();
+    res.header('x-auth-token', token).send(_.pick(user,["_id","name","email"]));
 })
 
 router.get('/', async (req, res)=>{ 
